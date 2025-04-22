@@ -1,14 +1,14 @@
 from scapy.all import *
 
-target_ip = "192.168.28.27"
+target_ip = "192.168.28.0/24"
 
 # Try resolving the MAC
 mac = getmacbyip(target_ip)
 if mac is None:
-    print(f"Could not resolve MAC for {target_ip}")
+    print("Could not resolve MAC ")
     exit()
 
-print(f"Resolved MAC: {mac}")
+print(f"Resolved MAC:")
 
 # Build Ethernet frame manually if needed
 eth = Ether(dst=mac)
