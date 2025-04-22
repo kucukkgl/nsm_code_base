@@ -8,7 +8,7 @@ if mac is None:
     print("Could not resolve MAC ")
     exit()
 
-print(f"Resolved MAC:")
+print("Resolved MAC:")
 
 # Build Ethernet frame manually if needed
 eth = Ether(dst=mac)
