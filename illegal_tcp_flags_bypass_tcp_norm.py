@@ -14,7 +14,7 @@ dst_ip = args.dst
 # -----------------------------
 # Send illegal TCP flags (SYN+FIN)
 # -----------------------------
-print(f"[+] Sending illegal TCP flags to {dst_ip}")
+print("[+] Sending illegal TCP flags to " + dst_ip)
 
 pkt = IP(dst=dst_ip) / TCP(dport=80, flags="SF")
 send(pkt, verbose=0)
