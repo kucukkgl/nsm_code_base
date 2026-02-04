@@ -1,0 +1,29 @@
+# 1. Basic request (baseline)
+curl http://127.0.0.1:80
+
+# 2. Oversized User-Agent header (header length anomaly)
+curl -H "User-Agent: $(python3 -c 'print(\"A\"*2000)')" http://127.0.0.1:80
+
+# 3. Non‑RFC characters in URL (non_rfc_char)
+curl "http://127.0.0.1:80/test/%00%01%02"
+
+# 4. Unicode directory traversal attempt (normalize_utf)
+curl "http://127.0.0.1:80/%c0%af%c0%ae%c0%afetc/passwd"
+
+# 5. Double-encoded payload (u_encode)
+curl "http://127.0.0.1:80/%252e%252e%252fetc/passwd"
+
+# 6. Chunked encoding anomaly (small_chunk_length)
+printf "POST / HTTP/1.1\r\nHost: localhost\r\nTransfer-Encoding: chunked\r\n\r\n0\r\n\r\n" | nc 127.0.0.1 80
+
+# 7. Invalid HTTP method (method anomaly)
+curl -X FOO http://127.0.0.1:80
+
+# 8. Excessive spaces in request line (max_spaces)
+curl "http://127.0.0.1:80/          test"
+
+# 9. Gzip-compressed request (inspect_gzip)
+curl --compressed http://127.0.0.1:80
+
+# 10. Long cookie header (cookie inspection)
+curl -H "Cookie: session=$(python3 -c 'print(\"B\"*1500)')" http://127.0.0.1:80
