@@ -56,12 +56,20 @@ def main():
     #   WITH normalize_ip4:
     #       Snort rewrites the 'len' field to the correct value,
     #       allowing detection rules to inspect the payload normally.
+    # 
+    # IMPORTANT NOTE ABOUT PYTHON VERSION:
+    # This VM uses Python 3.5, which does NOT support f-strings.
+    # (f-strings were introduced in Python 3.6.)
+    # Because of this, all formatted output in this script uses .format()
+    # instead of f"...". If you upgrade Python in the future, you may
+    # switch back to f-strings for cleaner syntax.
     # -------------------------------------------------------------
     pkt = IP(dst=args.dst, len=20) / Raw(payload)
 
-    print(f"[+] Sending malformed IPv4 packet to {args.dst}")
+    print("[+] Sending malformed IPv4 packet to {}".format(args.dst))
     print("[+] This packet intentionally violates the IPv4 total length field")
     print("[+] Use this to test Snort's normalize_ip4 preprocessor behavior")
+
 
     # -------------------------------------------------------------
     # Send the packet on the wire.
