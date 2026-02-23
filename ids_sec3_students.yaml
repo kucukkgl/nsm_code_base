@@ -1,0 +1,24 @@
+# IDS Section 3 - Student Roster
+# Week 7 NIDS Lab
+# Groups of 7 for attack waves
+
+group1:
+  scott5jp: 192.150.81.25     # SO box
+  blumbm: 192.150.84.75
+  wisselbo: 192.150.84.74
+  towerdm: 192.150.82.32
+  lyjb: 192.150.80.43
+  frickam: 192.150.84.70
+  fitzpakr: 192.150.82.36
+
+group2:
+  heekinap: 192.150.84.71
+  seegerta: 192.150.80.145
+  mcmillr3: 192.150.82.41
+  connolpe: 192.150.84.109
+  ringhord: 192.150.84.58     # old SO
+  fechtert: 192.150.80.26
+  rober2el: 192.150.84.22
+
+# You can comment out any student like this:
+#   absentstudent: 192.150.xx.xx

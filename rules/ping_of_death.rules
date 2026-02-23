@@ -1,0 +1,1 @@
+alert icmp any any -> any any (msg:"PING_OF_DEATH script - repeated X in ICMP payload"; content:"XXXXXXXX"; depth:64; classtype:attempted-dos; sid:1000001; rev:1;)
