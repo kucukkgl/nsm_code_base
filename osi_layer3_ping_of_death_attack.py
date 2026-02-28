@@ -29,21 +29,26 @@ def attack_group(group_name, roster):
 def main():
     parser = argparse.ArgumentParser(description="Ping of Death launcher")
 
-    # NEW: roster file argument
-    parser.add_argument("--roster", default="ids_sec3_students.json",
-                        help="Roster JSON file (default: ids_sec3_students.json)")
+    # NEW: roster file argument (optional)
+    parser.add_argument("--roster", default=None,
+                        help="Roster JSON file (optional; needed for --target-group)")
 
     parser.add_argument("--target-group", help="Group name (e.g., group1)")
     parser.add_argument("--target-ip", help="Single IP (e.g., 192.168.2.26)")
     args = parser.parse_args()
 
-    # UPDATED: load roster from argument
-    roster = load_roster(args.roster)
+    # UPDATED: load roster from argument if provided
+    roster = {}
+    if args.roster:
+        roster = load_roster(args.roster)
 
     if args.target_ip:
         send_pod(args.target_ip)
 
     if args.target_group:
+        if not args.roster:
+            print("Roster file required when using --target-group")
+            return
         attack_group(args.target_group, roster)
 
     if not args.target_ip and not args.target_group:
