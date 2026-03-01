@@ -1,8 +1,13 @@
 import json
 import argparse
 import os
-from scapy.all import *
 import time
+
+# scapy is only required when actually sending packets; allow argparse/help to work
+try:
+    from scapy.all import *
+except ImportError:
+    pass
 
 PAYLOAD = "X" * 60000   # oversized payload
 
