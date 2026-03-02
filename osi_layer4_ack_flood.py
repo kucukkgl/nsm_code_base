@@ -6,8 +6,8 @@ import os
 import sys
 
 # ===== LAB CONSTANTS (DO NOT CHANGE IN CLASS) =====
-DEST_PORT = 5555
-PACKET_COUNT = 200        # good IDS-friendly default
+DEST_PORT = 3333
+PACKET_COUNT = 100        # good IDS-friendly default
 SLEEP_TIME = 0.01
 # =================================================
 
