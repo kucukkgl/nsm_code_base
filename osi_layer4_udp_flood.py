@@ -3,7 +3,7 @@ import argparse
 from scapy.all import *
 import time
 import os
-import nmap
+import subprocess
 
 def load_roster(path):
     with open(path) as f:
@@ -11,8 +11,8 @@ def load_roster(path):
 
 def send_udp_flood_nmap(ip):
     print("Attacking {}".format(ip))
-    nm = nmap.PortScanner()
-    nm.scan(ip, '53,5353,5300', arguments='-sU')
+    cmd = ["nmap", "-sU", "-p", "53,5353,5300", ip]
+    output = subprocess.check_output(cmd)
     time.sleep(0.5)
 
 def attack_group(group_name, roster):
