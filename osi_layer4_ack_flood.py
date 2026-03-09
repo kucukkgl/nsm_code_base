@@ -81,10 +81,10 @@ def main():
     args = parser.parse_args()
 
     # Root check (Linux/macOS)
-    if IP is not None and hasattr(os, "geteuid"):
-        if os.geteuid() != 0:
-            print("Run as root to send packets.")
-            sys.exit(1)
+    #if IP is not None and hasattr(os, "geteuid"):
+        #if os.geteuid() != 0:
+        #    print("Run as root to send packets.")
+        #    sys.exit(1)
 
     roster = {}
 
