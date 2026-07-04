@@ -1,5 +1,15 @@
 # nsm_code_base
 
+# Requirements
+pip3 
+```
+sudo apt install pip3
+```
+
+scapy 2.3.4
+```
+pip3 install scapy==2.3.4
+```
 
 # 📘 **Usage: osi_layer3_ping_of_death_attack.py**
 
