@@ -12,7 +12,7 @@ def curl_ip(ip):
         result = subprocess.run(
             ["curl", "-s", "-o", "/dev/null", "-w", "%{http_code}", "http://{}:80".format(ip)],
             capture_output=True,
-            text=True
+            universal_newlines=True
         )
         print("{} -> HTTP {}".format(ip, result.stdout))
     except Exception as e:
