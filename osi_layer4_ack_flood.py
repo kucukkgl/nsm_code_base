@@ -40,7 +40,7 @@ def ack_flood(dest_ip):
         pkt = IP(dst=dest_ip) / TCP(
             sport=src_port,
             dport=DEST_PORT,
-            flags="A"
+            flags="A",
             ack=ack_num
         )
 
