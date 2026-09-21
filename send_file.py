@@ -5,7 +5,7 @@ import ipaddress
 import paramiko
 
 JSON_FILE = "students.json"
-REMOTE_DIRECTORY = "/tmp"
+REMOTE_DIRECTORY = "/home/administrator"
 CONNECT_TIMEOUT = 5
 
 
