@@ -152,6 +152,9 @@ print(f"Successful : {len(successful)}")
 print(f"Failed     : {len(failed)}")
 print(f"Invalid IP : {len(invalid)}")
 
+print("Username:", repr(USERNAME))
+print("Password:", repr(PASSWORD))
+
 if failed:
     print("\nFailed VMs:")
 
