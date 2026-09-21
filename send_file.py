@@ -1,5 +1,5 @@
+import argparse
 import json
-import sys
 import os
 import ipaddress
 import paramiko
@@ -8,30 +8,65 @@ JSON_FILE = "students.json"
 REMOTE_DIRECTORY = "/tmp"
 CONNECT_TIMEOUT = 5
 
-# Usage:
-# python3 send_file.py <file> <password> <username>
 
-if len(sys.argv) != 4:
-    print(f"Usage: python3 {sys.argv[0]} <file> <password> <username>")
-    print()
-    print("Example:")
-    print(f"  python3 {sys.argv[0]} passwords.txt 'Pa$$w0rd' administrator")
-    sys.exit(1)
+# --------------------------------------------------
+# Command-line arguments
+# --------------------------------------------------
 
-LOCAL_FILE = sys.argv[1]
-PASSWORD = sys.argv[2]
-USERNAME = sys.argv[3]
+parser = argparse.ArgumentParser(
+    description="Send a file to student lab VMs."
+)
+
+parser.add_argument(
+    "--file",
+    required=True,
+    help="Local file to send"
+)
+
+parser.add_argument(
+    "--username",
+    required=True,
+    help="Username on the recipient VMs"
+)
+
+parser.add_argument(
+    "--password",
+    required=True,
+    help="Password on the recipient VMs"
+)
+
+args = parser.parse_args()
+
+LOCAL_FILE = args.file
+USERNAME = args.username
+PASSWORD = args.password
+
+
+# --------------------------------------------------
+# Check file
+# --------------------------------------------------
 
 if not os.path.isfile(LOCAL_FILE):
     print(f"ERROR: File not found: {LOCAL_FILE}")
-    sys.exit(1)
+    raise SystemExit(1)
+
+
+# --------------------------------------------------
+# Load students
+# --------------------------------------------------
 
 try:
     with open(JSON_FILE, "r") as f:
         students = json.load(f)
-except (FileNotFoundError, json.JSONDecodeError) as e:
-    print(f"ERROR loading {JSON_FILE}: {e}")
-    sys.exit(1)
+
+except FileNotFoundError:
+    print(f"ERROR: {JSON_FILE} not found.")
+    raise SystemExit(1)
+
+except json.JSONDecodeError as e:
+    print(f"ERROR: Invalid JSON: {e}")
+    raise SystemExit(1)
+
 
 filename = os.path.basename(LOCAL_FILE)
 remote_file = f"{REMOTE_DIRECTORY}/{filename}"
@@ -40,21 +75,15 @@ successful = []
 failed = []
 invalid = []
 
-print()
-print("=" * 65)
-print("Class VM File Distribution")
-print("=" * 65)
-print(f"File       : {LOCAL_FILE}")
-print(f"Username   : {USERNAME}")
-print(f"Destination: {remote_file}")
-print(f"VM count   : {len(students)}")
-print("=" * 65)
+
+# --------------------------------------------------
+# Send file
+# --------------------------------------------------
 
 for student, ip in students.items():
 
     ip = ip.strip()
 
-    # Validate IP
     try:
         ipaddress.ip_address(ip)
     except ValueError:
@@ -80,7 +109,12 @@ for student, ip in students.items():
         )
 
         sftp = ssh.open_sftp()
-        sftp.put(LOCAL_FILE, remote_file)
+
+        sftp.put(
+            LOCAL_FILE,
+            remote_file
+        )
+
         sftp.close()
 
         print("OK")
@@ -97,22 +131,29 @@ for student, ip in students.items():
     finally:
         ssh.close()
 
+
+# --------------------------------------------------
+# Summary
+# --------------------------------------------------
+
 print()
-print("=" * 65)
+print("=" * 60)
 print("SUMMARY")
-print("=" * 65)
+print("=" * 60)
 
 print(f"Successful : {len(successful)}")
 print(f"Failed     : {len(failed)}")
 print(f"Invalid IP : {len(invalid)}")
 
 if failed:
-    print("\nFailed machines:")
+    print("\nFailed VMs:")
+
     for student, ip, reason in failed:
         print(f"  {student:20} {ip:16} {reason}")
 
 if invalid:
     print("\nInvalid IPs:")
+
     for student, ip in invalid:
         print(f"  {student:20} {ip}")
 
