@@ -23,7 +23,7 @@ parser.add_argument(
     help="Local file to send"
 )
 
-parser.add-argument(
+parser.add_argument(
     "--receipients",
     required=True,
     help="teh json file of students"
