@@ -23,6 +23,12 @@ parser.add_argument(
     help="Local file to send"
 )
 
+parser.add-argument(
+    ""--receipients",
+    required=True,
+    help="teh json file of students"
+)
+
 parser.add_argument(
     "--username",
     required=True,
@@ -38,6 +44,7 @@ parser.add_argument(
 args = parser.parse_args()
 
 LOCAL_FILE = args.file
+JSON_FILE=args.receipients
 USERNAME = args.username
 PASSWORD = args.password
 
