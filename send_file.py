@@ -24,7 +24,7 @@ parser.add_argument(
 )
 
 parser.add-argument(
-    ""--receipients",
+    "--receipients",
     required=True,
     help="teh json file of students"
 )
