@@ -3,7 +3,7 @@
 # Requirements
 pip3 
 ```
-sudo apt install pip3
+sudo apt install python3-pip
 ```
 
 scapy 2.3.4
